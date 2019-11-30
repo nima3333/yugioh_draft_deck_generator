@@ -8,9 +8,6 @@ import random
 r = requests.get('https://db.ygoprodeck.com/api/v5/cardsets.php')
 result = json.loads(r.content.decode('utf-8'))
 sets = [a["Set Name"] for a in result]
-print(len(sets))
-set2 = sets[34]
-print(set2)
 
 def get_random_cards(card_set, n, set_name):
     #Divide the card set into the common set and other set
@@ -27,11 +24,16 @@ def get_random_cards(card_set, n, set_name):
 
     #Open n boosters
     cards_list = []
-    for i in range(n):
-        for card_id in random.choices(common_cards, k=8):
-            cards_list.append(card_id)
-        for card_id in random.choices(other_cards, k=1):
-            cards_list.append(card_id)
+    if len(common_cards)!=0:
+        for i in range(n):
+            for card_id in random.choices(common_cards, k=8):
+                cards_list.append(card_id)
+            for card_id in random.choices(other_cards, k=1):
+                cards_list.append(card_id)
+    else:
+        for i in range(n):
+            for card_id in random.choices(other_cards, k=9):
+                cards_list.append(card_id)
     return cards_list
 
 def create_deck_from_cardList(card_set):
