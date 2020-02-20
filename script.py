@@ -5,9 +5,9 @@ import tkinter.ttk as ttk
 import re
 import random
 
-r = requests.get('https://db.ygoprodeck.com/api/v5/cardsets.php')
+r = requests.get('https://db.ygoprodeck.com/api/v6/cardsets.php')
 result = json.loads(r.content.decode('utf-8'))
-sets = [a["Set Name"] for a in result]
+sets = [a["set_name"] for a in result]
 
 def get_random_cards(card_set, n, set_name):
     #Divide the card set into the common set and other set
@@ -39,8 +39,9 @@ def get_random_cards(card_set, n, set_name):
 def create_deck_from_cardList(card_set):
     with open("deck.ydk", "w") as f:  
         f.write("#main\n")
+        print(card_set)
         for card in card_set:
-            f.write(card)
+            f.write(str(card))
             f.write("\n")
 
 fenetre = tkinter.Tk()
@@ -59,7 +60,7 @@ def generate():
     request_set_name = re.sub(" ", "%20", set_name).lower()
 
     #API request : get the cards
-    r = requests.get(f'https://db.ygoprodeck.com/api/v5/cardinfo.php?set={request_set_name}')
+    r = requests.get(f'https://db.ygoprodeck.com/api/v6/cardinfo.php?set={request_set_name}')
     result = json.loads(r.content.decode('utf-8'))
 
     #Open virtual boosters
